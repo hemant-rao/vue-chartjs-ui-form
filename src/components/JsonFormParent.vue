@@ -1,6 +1,6 @@
 <template>
   <div class="col-12 p-0">
-    printJsonData {{ printJsonData }}
+    <!-- printJsonData {{ printJsonData }} -->
     <h4>
       <strong>{{ dataTitle }}</strong>
     </h4>
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     updateData(value) {
-      // console.log("Dfadfasdfsdafsdaf", value);
+      console.log("JsonFormParent", value);
       this.$emit("update-data", value); // Emit any changes made in the form
     },
   },

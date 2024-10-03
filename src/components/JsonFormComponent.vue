@@ -83,7 +83,7 @@
           <input
             type="color"
             :value="dataObject"
-            @change="debouncedUpdate($event.target.value)"
+            @input="debouncedUpdate($event.target.value)"
             class="form-control form-control-color"
           />
         </template>
@@ -281,6 +281,7 @@ export default {
       clearTimeout(this.debounceTimeout); // Clear the previous timeout
       this.debounceTimeout = setTimeout(() => {
         this.updateData(value); // Update the data after the delay
+        // console.log("0000000000ddddddddd", value);
       }, 300); // 300ms delay
     },
   },

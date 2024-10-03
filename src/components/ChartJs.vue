@@ -5,7 +5,7 @@
         <div class="col-6 p-0">
           <!-- Color: <input type="color" /> -->
           <h2>Chart Options Form Json Form component</h2>
-          {{ chartData }}
+          <!-- {{ dynamicChartData }} -->
           <form @change="updateChart" class="row g-3">
             <div class="col-12 m-0">
               <label for="chartType" class="form-label mb-0"
@@ -32,9 +32,12 @@
             <div class="row p-0 m-0">
               <div class="col-6 p-0 pe-1">
                 <JsonFormParent
-                  v-if="chartData.labels.length && chartData.datasets.length"
+                  v-if="
+                    dynamicChartData.labels.length &&
+                    dynamicChartData.datasets.length
+                  "
                   :data-title="'Chart Data'"
-                  :printJsonData="chartData"
+                  :printJsonData="dynamicChartData"
                   @updateData="updateDataHandler"
                 />
               </div>
@@ -47,6 +50,7 @@
                   "
                   :data-title="'Chart Option'"
                   :printJsonData="chartOptions"
+                  @updateData="updateOptionHandler"
                 />
               </div>
             </div>
@@ -60,13 +64,17 @@
               v-if="chartToggler"
             >
               <h2 class="p-2">Chart Preview</h2>
+              <!-- {{ chartOptions }} -->
               <component
                 :is="getChartComponent(selectedChartType)"
                 ref="chartRef"
                 :key="chartKey"
-                :options="chartOptions"
-                :data="chartData"
-                v-if="chartData.labels.length && chartData.datasets.length"
+                :options="chartOptionsClone"
+                :data="chartUpdatedDataClone"
+                v-if="
+                  chartUpdatedDataClone.labels.length &&
+                  chartUpdatedDataClone.datasets.length
+                "
               />
             </div>
           </div>
@@ -74,9 +82,12 @@
             <div class="row p-0 m-0">
               <div class="col-6 pe-1">
                 <PrintJsonParent
-                  v-if="chartData.labels.length && chartData.datasets.length"
+                  v-if="
+                    dynamicChartData.labels.length &&
+                    dynamicChartData.datasets.length
+                  "
                   :data-title="'Chart Data'"
-                  :printJsonData="chartData"
+                  :printJsonData="dynamicChartData"
                 />
               </div>
               <div class="col-6 ps-1 pe-0">
@@ -198,24 +209,93 @@ export default {
           },
         },
       },
-      chartKey: 0, // key for forcing re-render
-    };
-  },
-  computed: {
-    chartData() {
-      return (
-        this.getChartData(this.selectedChartType, "computed", {}) || {
-          labels: ["Placeholder"],
-          datasets: [
-            {
-              label: "No Data Available",
-              data: [0],
-              backgroundColor: "#e0e0e0", // Grey color for the placeholder
+      chartOptionsClone: {
+        indexAxis: "x",
+        responsive: true,
+        animation: true,
+        animations: {
+          tension: {
+            duration: 3000,
+            easing: "easeInOutQuad",
+            from: 1,
+            to: "0",
+            loop: false,
+          },
+        },
+        maintainAspectRatio: false,
+        aspectRatio: 1 | 2,
+        plugins: {
+          customCanvasBackgroundColor: {
+            color: "#90ee90",
+          },
+          legend: {
+            display: true,
+            position: "top",
+            labels: {
+              color: "#000000",
+              usePointStyle: true,
             },
-          ],
-        }
-      );
-    },
+          },
+          tooltip: {
+            enabled: true,
+            mode: "index",
+            intersect: false,
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+            title: {
+              display: true,
+              text: "x-Axis Title",
+              color: "#f2311d",
+            },
+            grid: {
+              offset: true,
+              display: true,
+              color: "#cccccc",
+            },
+          },
+          y: {
+            beginAtZero: true,
+            stacked: true,
+            title: {
+              display: true,
+              text: "Y-Axis Title",
+              color: "#f2711d",
+            },
+            grid: {
+              display: true,
+              color: "#cccccc",
+            },
+          },
+        },
+      },
+      chartKey: 0, // key for forcing re-render
+      // Define Chart Data in the data object to make it dynamic
+      dynamicChartData: {
+        labels: ["A", "B", "C"],
+        datasets: [
+          {
+            label: "Bar Dataset",
+            data: [10, 20, 30],
+            backgroundColor: this.barColor,
+          },
+        ],
+      },
+      debounceTimeout: null,
+      updatingChartData: false,
+      chartUpdatedDataClone: {
+        labels: ["A", "B", "C"],
+        datasets: [
+          {
+            label: "Bar Dataset",
+            data: [10, 20, 30],
+            backgroundColor: this.barColor,
+          },
+        ],
+      },
+    };
   },
   methods: {
     getChartComponent(chartType) {
@@ -245,7 +325,7 @@ export default {
       switch (chartType) {
         case "bar":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            // console.log("dsfaaaaadsfdsfsad");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -257,8 +337,17 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
-            return { ...data };
+            return {
+              labels: data.labels,
+              datasets: [
+                {
+                  label: data.datasets[0].label,
+                  data: data.datasets[0].data,
+                  backgroundColor:
+                    data.datasets[0].backgroundColor || this.barColor,
+                },
+              ],
+            };
           }
         case "stackedBar":
           if (from === "computed") {
@@ -440,59 +529,80 @@ export default {
       }
     },
     updateChart() {
-      // this.chartToggler = false;
-      // this.$nextTick(() => {
-      //   this.chartToggler = true;
-      //   if (this.$refs.chartRef && this.$refs.chartRef.chartInstance) {
-      //     this.$refs.chartRef.chartInstance.update();
-      //   }
-      // });
-      // ==============================================================
-      const chartInstance = this.$refs.chartRef.chartInstance;
-      this.chartKey += 1;
-      // Check if chartInstance is available before updating
-      if (chartInstance) {
-        this.chartKey += 1;
-        // this.chartToggler = true;
-        // Update chart data
-        chartInstance.data = this.chartData;
-        // Update chart options
-        chartInstance.options = this.chartOptions;
-        // Trigger the chart to update with new data and options
-        chartInstance.update();
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
       }
-      // ==============================================================
-
-      // const chartInstance = this.$refs.chartRef.chartInstance;
-      // // Check if chartInstance exists
-      // if (chartInstance) {
-      //   // Destroy chart if needed
-      //   chartInstance.destroy();
-      // }
-      // // Optionally, you can create a new chart instance here if necessary
-      // this.$nextTick(() => {
-      //   // Increment the key to force re-render of the chart component
-      //   this.chartKey += 1;
-      //   if (this.$refs.chartRef && this.$refs.chartRef.chartInstance) {
-      //     this.$refs.chartRef.chartInstance.update();
-      //   }
-      // });
+      this.debounceTimeout = setTimeout(() => {
+        const chartInstance = this.$refs.chartRef?.chartInstance;
+        if (chartInstance) {
+          this.chartKey += 1;
+          chartInstance.data = this.dynamicChartData;
+          chartInstance.update();
+        }
+      }, 300); // Delay the update to prevent rapid triggering
+    },
+    updateOptionChart() {
+      if (this.debounceTimeout) {
+        clearTimeout(this.debounceTimeout);
+      }
+      this.debounceTimeout = setTimeout(() => {
+        const chartInstance = this.$refs.chartRef?.chartInstance;
+        if (chartInstance) {
+          this.chartKey += 1;
+          chartInstance.options = this.chartOptions;
+          chartInstance.update();
+        }
+      }, 300); // Delay the update to prevent rapid triggering
     },
     updateDataHandler(value) {
-      console.log("updateDataHandler", value);
-      this.getChartData(this.selectedChartType, "updated", value);
+      clearTimeout(this.debounceTimeout); // Clear the previous timeout
+      this.debounceTimeout = setTimeout(() => {
+        if (!this.updatingChartData) {
+          this.updatingChartData = true;
+          // Update the chart data when new data is emitted from the child
+          console.log("chartjs-updateDataHandler", value);
+          // Update the dynamic chart data
+          this.chartUpdatedDataClone = this.getChartData(
+            this.selectedChartType,
+            "updated",
+            value
+          );
+          console.log("chartUpdatedDataClone", this.chartUpdatedDataClone);
+          // Re-render the chart
+          this.updatingChartData = false;
+        }
+      }, 300); // 300ms delay
+    },
+    updateOptionHandler(value) {
+      clearTimeout(this.debounceTimeout); // Clear the previous timeout
+      this.debounceTimeout = setTimeout(() => {
+        if (!this.updatingChartData) {
+          this.updatingChartData = true;
+          // Update the chart data when new data is emitted from the child
+          console.log("chartjs-updateOptionHandler", value);
+          // Update the dynamic chart data
+          this.chartOptionsClone = { ...value };
+          console.log("updateOptionHandler", this.chartUpdatedDataClone);
+          // Re-render the chart
+          this.updatingChartData = false;
+        }
+      }, 300); // 300ms delay
     },
   },
   watch: {
-    chartOptions: {
-      handler() {
-        this.updateChart();
+    dynamicChartData: {
+      handler(newValue, oldValue) {
+        if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+          this.updateChart();
+        }
       },
       deep: true,
     },
-    chartData: {
-      handler() {
-        this.updateChart();
+    chartOptions: {
+      handler(newValue, oldValue) {
+        if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+          this.updateOptionChart();
+        }
       },
       deep: true,
     },
