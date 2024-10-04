@@ -376,4 +376,7 @@ span.data__no-list {
 .data__list-items--opened {
   display: block;
 }
+.colorpick-eyedropper-input-trigger {
+  display: none;
+}
 </style>

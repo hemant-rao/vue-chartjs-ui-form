@@ -1,20 +1,22 @@
 <template>
   <div class="container-fluid">
     <div class="col-12 p-0">
+      <h2 class="text-center my-1">Vue ChartJs UI Form</h2>
       <div class="row m-0 p-0">
         <div class="col-6 p-0">
           <!-- Color: <input type="color" /> -->
-          <h2>Chart Options Form Json Form component</h2>
           <!-- {{ dynamicChartData }} -->
           <form @change="updateChart" class="row g-3">
-            <div class="col-12 m-0">
-              <label for="chartType" class="form-label mb-0"
-                >Select Chart Type:</label
-              >
+            <div
+              class="col-12 m-0 d-flex justify-content-start align-items-center"
+            >
+              <label for="chartType" class="form-label mb-0 me-1"
+                >Select Chart Type:
+              </label>
               <select
                 id="chartType"
                 v-model="selectedChartType"
-                class="form-select"
+                class="form-select w-25"
               >
                 <option value="bar">Bar</option>
                 <option value="stackedBar">Stacked Bar</option>
@@ -31,6 +33,7 @@
           <div class="col-12 mt-1">
             <div class="row p-0 m-0">
               <div class="col-6 p-0 pe-1">
+                <!-- {{ dynamicChartData }} -->
                 <JsonFormParent
                   v-if="
                     dynamicChartData.labels.length &&
@@ -63,8 +66,8 @@
               style="height: 300px; max-height: 300px"
               v-if="chartToggler"
             >
-              <h2 class="p-2">Chart Preview</h2>
-              <!-- {{ chartOptions }} -->
+              <h6 class="p-2"><strong>Chart Preview</strong></h6>
+              <!-- chartUpdatedDataClone {{ chartUpdatedDataClone }} -->
               <component
                 :is="getChartComponent(selectedChartType)"
                 ref="chartRef"
@@ -280,6 +283,8 @@ export default {
             label: "Bar Dataset",
             data: [10, 20, 30],
             backgroundColor: this.barColor,
+            borderColor: "#42a5f5",
+            fill: false,
           },
         ],
       },
@@ -386,25 +391,30 @@ export default {
           }
         case "line":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("00000000000000000000-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
                 {
                   label: "Line Dataset",
-                  data: [10, 30, 20],
+                  data: [10, 50, 20],
                   borderColor: this.barColor,
                   fill: false,
                 },
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
-            return { ...data };
+            console.log("00000000000000000000-ELSE", JSON.stringify(data));
+            return {
+              labels: data.labels,
+              datasets: data.datasets,
+              borderColor: this.barColor,
+              fill: false,
+            };
           }
         case "doughnut":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("doughnut-computed");
             return {
               labels: ["Red", "Yellow", "Green", "Blue"],
               datasets: [
@@ -421,7 +431,7 @@ export default {
           }
         case "pie":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("pie-computed");
             return {
               labels: ["Red", "Blue", "Yellow"],
               datasets: [
@@ -438,7 +448,7 @@ export default {
           }
         case "polarArea":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("polarArea-computed");
             return {
               labels: ["Red", "Blue", "Yellow"],
               datasets: [
@@ -455,7 +465,7 @@ export default {
           }
         case "radar":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("radar-computed");
             return {
               labels: ["A", "B", "C", "D", "E"],
               datasets: [
@@ -481,7 +491,7 @@ export default {
           }
         case "bubble":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("bubble-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -502,7 +512,7 @@ export default {
           }
         case "scatter":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
+            console.log("scatter-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -529,17 +539,30 @@ export default {
       }
     },
     updateChart() {
-      if (this.debounceTimeout) {
-        clearTimeout(this.debounceTimeout);
-      }
-      this.debounceTimeout = setTimeout(() => {
-        const chartInstance = this.$refs.chartRef?.chartInstance;
-        if (chartInstance) {
-          this.chartKey += 1;
-          chartInstance.data = this.dynamicChartData;
-          chartInstance.update();
+      this.chartUpdatedDataClone = {
+        labels: [],
+        datasets: [],
+      };
+      this.chartUpdatedDataClone = this.getChartData(
+        this.selectedChartType,
+        "computed",
+        {}
+      );
+      this.$nextTick(() => {
+        this.dynamicChartData.labels = this.chartUpdatedDataClone.labels;
+        this.dynamicChartData.datasets = this.chartUpdatedDataClone.datasets;
+        if (this.debounceTimeout) {
+          clearTimeout(this.debounceTimeout);
         }
-      }, 300); // Delay the update to prevent rapid triggering
+        this.debounceTimeout = setTimeout(() => {
+          const chartInstance = this.$refs.chartRef?.chartInstance;
+          if (chartInstance) {
+            this.chartKey += 1;
+            chartInstance.data = this.chartUpdatedDataClone;
+            chartInstance.update();
+          }
+        }, 300); // Delay the update to prevent rapid triggering
+      });
     },
     updateOptionChart() {
       if (this.debounceTimeout) {
@@ -555,6 +578,10 @@ export default {
       }, 300); // Delay the update to prevent rapid triggering
     },
     updateDataHandler(value) {
+      this.chartUpdatedDataClone = {
+        labels: [],
+        datasets: [],
+      };
       clearTimeout(this.debounceTimeout); // Clear the previous timeout
       this.debounceTimeout = setTimeout(() => {
         if (!this.updatingChartData) {
@@ -567,6 +594,11 @@ export default {
             "updated",
             value
           );
+          // this.dynamicChartData = this.getChartData(
+          //   this.selectedChartType,
+          //   "updated",
+          //   value
+          // );
           console.log("chartUpdatedDataClone", this.chartUpdatedDataClone);
           // Re-render the chart
           this.updatingChartData = false;
@@ -582,7 +614,7 @@ export default {
           console.log("chartjs-updateOptionHandler", value);
           // Update the dynamic chart data
           this.chartOptionsClone = { ...value };
-          console.log("updateOptionHandler", this.chartUpdatedDataClone);
+          // console.log("updateOptionHandler", this.chartUpdatedDataClone);
           // Re-render the chart
           this.updatingChartData = false;
         }
@@ -590,14 +622,15 @@ export default {
     },
   },
   watch: {
-    dynamicChartData: {
-      handler(newValue, oldValue) {
-        if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-          this.updateChart();
-        }
-      },
-      deep: true,
-    },
+    // dynamicChartData: {
+    //   handler(newValue, oldValue) {
+    //     if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+    //       this.updateChart();
+    //       this.chartUpdatedDataClone = newValue;
+    //     }
+    //   },
+    //   deep: true,
+    // },
     chartOptions: {
       handler(newValue, oldValue) {
         if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
@@ -606,12 +639,12 @@ export default {
       },
       deep: true,
     },
-    selectedChartType: {
-      handler() {
-        // this.updateChart();
-      },
-      deep: true,
-    },
+    // selectedChartType: {
+    //   handler() {
+    //     this.updateChart();
+    //   },
+    //   deep: true,
+    // },
   },
 };
 </script>

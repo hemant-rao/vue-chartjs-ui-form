@@ -273,7 +273,7 @@ export default {
       this.$emit("update-data", value);
     },
     updateChildData(key, value) {
-      console.log("updateChildData-value", key, ":", value);
+      // console.log("updateChildData-value", key, ":", value);
       this.formData[key] = value;
       this.$emit("update-data", this.formData);
     },
@@ -376,4 +376,26 @@ span.data__no-list {
 .data__list-items--opened {
   display: block;
 }
+.colorpick-eyedropper-input-trigger {
+  display: none;
+}
+/* .form-control[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 50px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
+.form-control[type="color"]::-webkit-color-swatch {
+  border-radius: 15px;
+  border: 7px solid #000000;
+}
+.form-control[type="color"]::-moz-color-swatch {
+  border-radius: 15px;
+  border: 7px solid #000000;
+} */
 </style>

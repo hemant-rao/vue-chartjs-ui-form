@@ -1,19 +1,19 @@
 <template>
   <div class="col-12 p-0">
-    <h4>
+    <h6>
       <strong>{{ dataTitle }}</strong>
-    </h4>
+    </h6>
     <div class="col-12 p-0 bg-light json-viewer-height">
       <!-- <h2>Limits output to 1000 nested nodes</h2> -->
       <!-- <JsonTree :depth="1000" expanded :data-object="completeJsonData" />
           <pre>{{ typeof completeJsonData }}: {{ completeJsonData }}</pre> -->
       <!-- <h2>Print all nodes as expanded</h2> -->
       <div class="col-12 p-2">
-        <JsonTree :depth="1000" :data-object="completeJsonData" expanded />
+        <JsonTree :depth="1000" :data-object="completeJsonData" />
       </div>
     </div>
     <div class="col-12 raw-json-bg raw-json-parent p-2">
-      <p><strong>Raw JSON</strong></p>
+      <p class="raw-title-border"><strong>Raw JSON</strong></p>
       <div class="col-12 p-0 json-viewer-height">
         <pre>{{ typeof completeJsonData }}: {{ completeJsonData }}</pre>
       </div>
@@ -72,11 +72,17 @@ export default {
   background-color: #eaf4ff;
 }
 .json-viewer-height {
-  height: 550px;
+  height: auto;
   max-height: 550px;
   overflow: auto;
 }
 .raw-json-parent {
   text-align: left;
+}
+.raw-json-parent .json-viewer-height {
+  height: 550px;
+}
+.raw-title-border {
+  border-bottom: 1px solid #3784d9;
 }
 </style>

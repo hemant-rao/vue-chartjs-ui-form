@@ -1,11 +1,18 @@
 <template>
   <div class="col-12 p-0">
-    <!-- printJsonData {{ printJsonData }} -->
-    <h4>
+    <!-- printJsonData {{ completeJsonData }} -->
+    <h6>
       <strong>{{ dataTitle }}</strong>
-    </h4>
+    </h6>
     <div class="col-12 p-0 bg-light json-viewer-height">
-      <div class="col-12 p-2">
+      <div
+        class="col-12 p-2"
+        v-if="
+          completeJsonData &&
+          completeJsonData.labels &&
+          completeJsonData.labels.length
+        "
+      >
         <JsonFormComponentData
           v-if="dataTitle === 'Chart Data'"
           :depth="1000"
@@ -13,8 +20,10 @@
           expanded
           @update-data="updateData"
         />
+      </div>
+      <div class="col-12 p-2" v-if="completeJsonData.indexAxis">
         <JsonFormComponent
-          v-else
+          v-if="dataTitle !== 'Chart Data'"
           :depth="1000"
           :data-object="completeJsonData"
           expanded
@@ -63,14 +72,14 @@ export default {
   },
   methods: {
     updateData(value) {
-      console.log("JsonFormParent", value);
+      // console.log("JsonFormParent", value);
       this.$emit("update-data", value); // Emit any changes made in the form
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .raw-json-bg {
   background-color: #eaf4ff;
 }
@@ -82,4 +91,7 @@ export default {
 .raw-json-parent {
   text-align: left;
 }
+/* .raw-json-parent .json-viewer-height {
+  height: 550px;
+} */
 </style>
