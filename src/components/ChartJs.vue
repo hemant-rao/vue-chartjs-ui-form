@@ -331,16 +331,7 @@ export default {
         case "bar":
           if (from === "computed") {
             // console.log("dsfaaaaadsfdsfsad");
-            return {
-              labels: ["A", "B", "C"],
-              datasets: [
-                {
-                  label: "Bar Dataset",
-                  data: [10, 20, 30],
-                  backgroundColor: this.barColor,
-                },
-              ],
-            };
+            return { ...data };
           } else {
             return {
               labels: data.labels,
@@ -405,12 +396,7 @@ export default {
             };
           } else {
             console.log("00000000000000000000-ELSE", JSON.stringify(data));
-            return {
-              labels: data.labels,
-              datasets: data.datasets,
-              borderColor: this.barColor,
-              fill: false,
-            };
+            return { ...data };
           }
         case "doughnut":
           if (from === "computed") {
