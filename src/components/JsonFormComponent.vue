@@ -133,7 +133,7 @@
           :expanded="expanded"
           :depth="depth"
           v-bind:currentDepth="currentDepth"
-          @update-data="debouncedUpdate(key, node, $event)"
+          @update-data="updateChildData(key, $event)"
         />
       </template>
     </div>
@@ -189,7 +189,13 @@ export default {
         "drawTicks",
         "drawBorder",
       ],
-      inputColorList: ["color", "backgroundColor", "borderColor"],
+      inputColorList: [
+        "color",
+        "backgroundColor",
+        "borderColor",
+        "bodyColor",
+        "tickColor",
+      ],
       debounceTimeout: null, // Timeout for debounce
     };
   },
@@ -306,7 +312,8 @@ export default {
     debouncedUpdate(value) {
       clearTimeout(this.debounceTimeout); // Clear the previous timeout
       this.debounceTimeout = setTimeout(() => {
-        this.updateData(value); // Update the data after the delay
+        // this.updateData(value); // Update the data after the delay
+        this.$emit("update-data", value);
       }, 300);
     },
     colorClassHandler(objectKey) {
