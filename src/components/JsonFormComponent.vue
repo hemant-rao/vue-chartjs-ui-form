@@ -45,7 +45,9 @@
             </option>
           </select>
         </template>
-        <template v-else-if="objectKey === 'position'">
+        <template
+          v-else-if="objectKey === 'position' || objectKey === 'xAlign'"
+        >
           <select
             :value="dataObject"
             @input="debouncedUpdate($event.target.value)"
@@ -53,6 +55,21 @@
           >
             <option
               v-for="option in ['top', 'right', 'bottom', 'left']"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </template>
+        <template v-else-if="objectKey === 'yAlign'">
+          <select
+            :value="dataObject"
+            @input="debouncedUpdate($event.target.value)"
+            class="form-select"
+          >
+            <option
+              v-for="option in ['top', 'center', 'bottom']"
               :key="option"
               :value="option"
             >
@@ -116,7 +133,7 @@
           :expanded="expanded"
           :depth="depth"
           v-bind:currentDepth="currentDepth"
-          @update-data="updateChildData(key, $event)"
+          @update-data="debouncedUpdate(key, node, $event)"
         />
       </template>
     </div>
@@ -165,10 +182,12 @@ export default {
         "enabled",
         "intersect",
         "stacked",
-        "display",
         "offset",
         "beginAtZero",
         "fill",
+        "displayColors",
+        "drawTicks",
+        "drawBorder",
       ],
       inputColorList: ["color", "backgroundColor", "borderColor"],
       debounceTimeout: null, // Timeout for debounce
@@ -274,11 +293,15 @@ export default {
       this.open = !this.open;
     },
     updateData(value) {
+      console.log("-----dfasdf--updateData", value);
       this.$emit("update-data", value);
     },
     updateChildData(key, value) {
-      this.formData[key] = value;
-      this.$emit("update-data", this.formData);
+      console.log("-----dfasdf--child", key, "::", value);
+      if (this.formData[key] !== value) {
+        this.formData[key] = value;
+        this.$emit("update-data", this.formData);
+      }
     },
     debouncedUpdate(value) {
       clearTimeout(this.debounceTimeout); // Clear the previous timeout

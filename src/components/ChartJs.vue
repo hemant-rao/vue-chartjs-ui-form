@@ -170,17 +170,49 @@ export default {
             color: "#90ee90",
           },
           legend: {
-            display: true,
+            display: false, // Overridden by the second object
             position: "top",
             labels: {
               color: "#000000",
               usePointStyle: true,
             },
           },
+          title: {
+            display: true,
+            text: "1 Year Trend",
+          },
           tooltip: {
             enabled: true,
             mode: "index",
             intersect: false,
+            backgroundColor: "#ffffff",
+            borderColor: "#dee2e6",
+            borderWidth: 1,
+            bodyColor: "#000000",
+            yAlign: "center",
+            xAlign: "right",
+            padding: 5,
+            bodySpacing: 5,
+            displayColors: false,
+            callbacks: {},
+            titleFont: {
+              size: 8,
+            },
+            bodyFont: {
+              size: 8,
+            },
+            footerFont: {
+              size: 8,
+            },
+          },
+          datalabels: {
+            anchor: "end",
+            offset: -7,
+            align: "end",
+            color: "#3c0d48",
+            // formatter: function (value, context) {
+            //   return value > 0 ? value : "";
+            // },
           },
         },
         scales: {
@@ -195,6 +227,22 @@ export default {
               offset: true,
               display: true,
               color: "#cccccc",
+              drawTicks: true,
+              tickColor: "#707070",
+            },
+            ticks: {
+              color: "#000000",
+              font: { size: 7 },
+              minor: {
+                enabled: true,
+                display: "auto",
+                color: "#c0c0c0",
+                lineWidth: 0.5,
+              },
+            },
+            border: {
+              display: true,
+              color: "#707070",
             },
           },
           y: {
@@ -208,9 +256,24 @@ export default {
             grid: {
               display: true,
               color: "#cccccc",
+              tickBorderDash: [],
+              drawBorder: true,
+              lineWidth: 0.5,
+              drawTicks: false,
+            },
+            border: {
+              display: false,
+              dash: [4, 4],
+            },
+            ticks: {
+              color: "#000000",
+              display: true,
+              padding: 8,
+              font: { size: 7 },
             },
           },
         },
+        barThickness: 22,
       },
       chartOptionsClone: {
         indexAxis: "x",
@@ -232,17 +295,49 @@ export default {
             color: "#90ee90",
           },
           legend: {
-            display: true,
+            display: false, // Overridden by the second object
             position: "top",
             labels: {
               color: "#000000",
               usePointStyle: true,
             },
           },
+          title: {
+            display: true,
+            text: "1 Year Trend",
+          },
           tooltip: {
             enabled: true,
             mode: "index",
             intersect: false,
+            backgroundColor: "#ffffff",
+            borderColor: "#dee2e6",
+            borderWidth: 1,
+            bodyColor: "#000000",
+            yAlign: "center",
+            xAlign: "right",
+            padding: 5,
+            bodySpacing: 5,
+            displayColors: false,
+            callbacks: {},
+            titleFont: {
+              size: 8,
+            },
+            bodyFont: {
+              size: 8,
+            },
+            footerFont: {
+              size: 8,
+            },
+          },
+          datalabels: {
+            anchor: "end",
+            offset: -7,
+            align: "end",
+            color: "#3c0d48",
+            // formatter: function (value, context) {
+            //   return value > 0 ? value : "";
+            // },
           },
         },
         scales: {
@@ -257,6 +352,22 @@ export default {
               offset: true,
               display: true,
               color: "#cccccc",
+              drawTicks: true,
+              tickColor: "#707070",
+            },
+            ticks: {
+              color: "#000000",
+              font: { size: 7 },
+              minor: {
+                enabled: true,
+                display: "auto",
+                color: "#c0c0c0",
+                lineWidth: 0.5,
+              },
+            },
+            border: {
+              display: true,
+              color: "#707070",
             },
           },
           y: {
@@ -270,9 +381,24 @@ export default {
             grid: {
               display: true,
               color: "#cccccc",
+              tickBorderDash: [],
+              drawBorder: true,
+              lineWidth: 0.5,
+              drawTicks: false,
+            },
+            border: {
+              display: false,
+              dash: [4, 4],
+            },
+            ticks: {
+              color: "#000000",
+              display: true,
+              padding: 8,
+              font: { size: 7 },
             },
           },
         },
+        barThickness: 22,
       },
       chartKey: 0, // key for forcing re-render
       // Define Chart Data in the data object to make it dynamic
