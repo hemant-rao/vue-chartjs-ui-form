@@ -73,14 +73,15 @@ export default {
 }
 .json-viewer-height {
   height: auto;
-  max-height: 550px;
+  max-height: calc(100vh - 100px);
   overflow: auto;
 }
 .raw-json-parent {
   text-align: left;
 }
 .raw-json-parent .json-viewer-height {
-  height: 550px;
+  height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px);
 }
 .raw-title-border {
   border-bottom: 1px solid #3784d9;

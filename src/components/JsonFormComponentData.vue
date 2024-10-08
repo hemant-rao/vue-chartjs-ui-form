@@ -12,7 +12,7 @@
       "
     >
       <span class="data__key">{{ objectKey }}</span>
-      <span :class="dataValueClass">{{ dataValue }}</span>
+      <!-- <span :class="dataValueClass">{{ dataValue }}</span> -->
       <span v-if="isPrimitive" class="ms-1" @click.stop="">
         <template v-if="objectKey === 'indexAxis'">
           <select
@@ -303,7 +303,7 @@ export default {
 .data__type {
   position: relative;
   font-family: courier;
-  font-size: 1rem;
+  font-size: 0.8rem;
   white-space: pre;
   text-align: left;
 }

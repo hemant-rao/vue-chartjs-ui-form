@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="col-12 p-0">
       <h2 class="text-center my-1">Vue ChartJs UI Form</h2>
-      <div class="row m-0 p-0">
+      <div class="row m-0 p-0 mb-3">
         <div class="col-6 p-0">
           <!-- Color: <input type="color" /> -->
           <!-- {{ dynamicChartData }} -->
@@ -646,5 +646,17 @@ export default {
 h2 {
   font-size: 20px;
   margin-bottom: 10px;
+}
+.form-select {
+  border-radius: 0px !important;
+  padding: 0.1rem 2.25rem 0.1rem 0.75rem;
+}
+.form-control:focus,
+.form-select:focus,
+.form-select:active,
+.form-select:focus-visible {
+  outline: none;
+  border-color: #dee2e6;
+  box-shadow: none;
 }
 </style>

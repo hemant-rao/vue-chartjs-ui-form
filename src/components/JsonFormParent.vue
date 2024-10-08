@@ -13,7 +13,7 @@
           completeJsonData.labels.length
         "
       >
-        <JsonFormComponentData
+        <JsonFormComponent
           v-if="dataTitle === 'Chart Data'"
           :depth="1000"
           :data-object="completeJsonData"
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import JsonFormComponentData from "./JsonFormComponentData.vue";
+// import JsonFormComponentData from "./JsonFormComponentData.vue";
 import JsonFormComponent from "./JsonFormComponent.vue";
 export default {
   props: {
@@ -52,7 +52,7 @@ export default {
   },
   name: "JsonFormParent",
   components: {
-    JsonFormComponentData,
+    // JsonFormComponentData,
     JsonFormComponent,
   },
   data() {
@@ -84,8 +84,8 @@ export default {
   background-color: #eaf4ff;
 }
 .json-viewer-height {
-  height: 550px;
-  max-height: 550px;
+  height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px);
   overflow: auto;
 }
 .raw-json-parent {

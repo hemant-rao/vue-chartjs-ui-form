@@ -12,8 +12,13 @@
       "
     >
       <span class="data__key">{{ objectKey }}</span>
-      <span :class="dataValueClass">{{ dataValue }}</span>
-      <span v-if="isPrimitive" class="ms-1" @click.stop="">
+      <!-- <span :class="dataValueClass">{{ dataValue }}</span> -->
+      <span
+        v-if="isPrimitive"
+        :class="colorClassHandler(objectKey)"
+        class="ms-1"
+        @click.stop=""
+      >
         <template v-if="objectKey === 'indexAxis'">
           <select
             :value="dataObject"
@@ -55,17 +60,17 @@
             </option>
           </select>
         </template>
-        <template v-else-if="inputTextFieldList.includes(objectKey)">
+        <template v-else-if="inputNumberFieldList.includes(objectKey)">
           <input
-            type="text"
+            type="number"
             :value="dataObject"
             @input="debouncedUpdate($event.target.value)"
             class="form-control"
           />
         </template>
-        <template v-else-if="inputNumberFieldList.includes(objectKey)">
+        <template v-else-if="inputTextFieldList.includes(objectKey)">
           <input
-            type="number"
+            type="text"
             :value="dataObject"
             @input="debouncedUpdate($event.target.value)"
             class="form-control"
@@ -104,7 +109,7 @@
       <div v-if="!showDepth">...</div>
       <template v-else>
         <JsonFormComponent
-          v-for="(node, key) in data"
+          v-for="(node, key) in formData"
           :key="key"
           :object-key="key"
           :data-object="node"
@@ -177,7 +182,7 @@ export default {
     }
   },
   computed: {
-    data() {
+    formData() {
       if (typeof this.dataObject === "boolean") return this.dataObject;
       if (this.dataObject) {
         return this.dataObject;
@@ -192,28 +197,28 @@ export default {
       return null;
     },
     dataValue() {
-      if (this.isArray) return `Array[${this.data.length}]`;
+      if (this.isArray) return `Array[${this.formData.length}]`;
       if (this.isObject) {
-        const objLength = Object.keys(this.data).length;
+        const objLength = Object.keys(this.formData).length;
         return objLength ? "Object" : "Object (empty)";
       }
       return this.primitiveValue;
     },
     primitiveValue() {
       if (this.isNull) return "null";
-      return this.data;
+      return this.formData;
     },
     dataType() {
       if (this.isNull) return "null";
       if (this.isObject) return "object";
       if (this.isArray) return "array";
-      return typeof this.data;
+      return typeof this.formData;
     },
     isPrimitive() {
       return (
-        typeof this.data === "string" ||
-        typeof this.data === "number" ||
-        typeof this.data === "boolean" ||
+        typeof this.formData === "string" ||
+        typeof this.formData === "number" ||
+        typeof this.formData === "boolean" ||
         this.isNull
       );
     },
@@ -221,18 +226,18 @@ export default {
       return (
         !this.isNull &&
         !this.isUndefined &&
-        !Array.isArray(this.data) &&
-        typeof this.data === "object"
+        !Array.isArray(this.formData) &&
+        typeof this.formData === "object"
       );
     },
     isArray() {
-      return Array.isArray(this.data);
+      return Array.isArray(this.formData);
     },
     isNull() {
-      return this.data === null;
+      return this.formData === null;
     },
     isUndefined() {
-      return this.data === undefined;
+      return this.formData === undefined;
     },
     dataValueClass() {
       const dataValueClass = ["data__value"];
@@ -269,24 +274,26 @@ export default {
       this.open = !this.open;
     },
     updateData(value) {
-      //   console.log("updateData-value", value);
       this.$emit("update-data", value);
     },
     updateChildData(key, value) {
-      // // console.log("updateChildData-value", key, ":", value);
-      this.data[key] = value;
-      this.$emit("update-data", this.data);
+      this.formData[key] = value;
+      this.$emit("update-data", this.formData);
     },
     debouncedUpdate(value) {
       clearTimeout(this.debounceTimeout); // Clear the previous timeout
       this.debounceTimeout = setTimeout(() => {
         this.updateData(value); // Update the data after the delay
-        // console.log("0000000000ddddddddd", value);
-      }, 300); // 300ms delay
+      }, 300);
+    },
+    colorClassHandler(objectKey) {
+      if (objectKey.toString().includes("color")) {
+        return "color-picker";
+      }
     },
   },
   watch: {
-    data: {
+    formData: {
       handler(newValue) {
         this.$emit("update-data", newValue);
       },
@@ -300,10 +307,34 @@ export default {
 * {
   text-align: left;
 }
+.form-control {
+  border-radius: 0px !important;
+  padding: 0.1rem 8px;
+}
+.form-select {
+  border-radius: 0px !important;
+  padding: 0.1rem 2.25rem 0.1rem 0.75rem;
+}
+.form-control-color {
+  width: 2em;
+  height: 2em;
+  border-radius: 50% !important;
+  box-shadow: 1px 1px 3px 0px grey;
+  padding: 0;
+}
+.form-control:focus,
+.form-select:focus,
+.form-select:active,
+.form-select:focus-visible,
+.form-check-input:focus {
+  outline: none;
+  border-color: #dee2e6;
+  box-shadow: none;
+}
 .data__type {
   position: relative;
   font-family: courier;
-  font-size: 1rem;
+  font-size: 0.8rem;
   white-space: pre;
   text-align: left;
 }

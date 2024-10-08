@@ -174,7 +174,7 @@
   .data__type {
     position: relative;
     font-family: courier;
-    font-size: 1rem;
+    font-size: .8rem;
     white-space: pre;
     text-align: left;
   }
