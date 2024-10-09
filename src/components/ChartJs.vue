@@ -47,12 +47,12 @@
               <div class="col-6 ps-1 pe-1">
                 <JsonFormParent
                   v-if="
-                    chartOptions &&
-                    chartOptions.plugins &&
-                    chartOptions.plugins.legend
+                    chartOptionsClone &&
+                    chartOptionsClone.plugins &&
+                    chartOptionsClone.plugins.legend
                   "
                   :data-title="'Chart Option'"
-                  :printJsonData="chartOptions"
+                  :printJsonData="chartOptionsClone"
                   @updateData="updateOptionHandler"
                 />
               </div>
@@ -67,7 +67,6 @@
               v-if="chartToggler"
             >
               <h6 class="p-2"><strong>Chart Preview</strong></h6>
-              <!-- chartUpdatedDataClone {{ chartUpdatedDataClone }} -->
               <component
                 :is="getChartComponent(selectedChartType)"
                 ref="chartRef"
@@ -96,12 +95,12 @@
               <div class="col-6 ps-1 pe-0">
                 <PrintJsonParent
                   v-if="
-                    chartOptions &&
-                    chartOptions.plugins &&
-                    chartOptions.plugins.legend
+                    chartOptionsClone &&
+                    chartOptionsClone.plugins &&
+                    chartOptionsClone.plugins.legend
                   "
                   :data-title="'Chart Option'"
-                  :printJsonData="chartOptions"
+                  :printJsonData="chartOptionsClone"
                 />
               </div>
             </div>
@@ -196,13 +195,13 @@ export default {
             displayColors: false,
             callbacks: {},
             titleFont: {
-              size: 8,
+              size: 16,
             },
             bodyFont: {
-              size: 8,
+              size: 16,
             },
             footerFont: {
-              size: 8,
+              size: 16,
             },
           },
           datalabels: {
@@ -232,7 +231,7 @@ export default {
             },
             ticks: {
               color: "#000000",
-              font: { size: 7 },
+              font: { size: 16 },
               minor: {
                 enabled: true,
                 display: "auto",
@@ -269,7 +268,7 @@ export default {
               color: "#000000",
               display: true,
               padding: 8,
-              font: { size: 7 },
+              font: { size: 16 },
             },
           },
         },
@@ -321,13 +320,13 @@ export default {
             displayColors: false,
             callbacks: {},
             titleFont: {
-              size: 8,
+              size: 16,
             },
             bodyFont: {
-              size: 8,
+              size: 16,
             },
             footerFont: {
-              size: 8,
+              size: 16,
             },
           },
           datalabels: {
@@ -357,7 +356,7 @@ export default {
             },
             ticks: {
               color: "#000000",
-              font: { size: 7 },
+              font: { size: 16 },
               minor: {
                 enabled: true,
                 display: "auto",
@@ -394,7 +393,7 @@ export default {
               color: "#000000",
               display: true,
               padding: 8,
-              font: { size: 7 },
+              font: { size: 16 },
             },
           },
         },
@@ -415,7 +414,6 @@ export default {
         ],
       },
       debounceTimeout: null,
-      updatingChartData: false,
       chartUpdatedDataClone: {
         labels: ["A", "B", "C"],
         datasets: [
@@ -457,19 +455,21 @@ export default {
         case "bar":
           if (from === "computed") {
             // console.log("dsfaaaaadsfdsfsad");
-            return { ...data };
-          } else {
             return {
-              labels: data.labels,
+              labels: ["A", "B", "C"],
               datasets: [
                 {
-                  label: data.datasets[0].label,
-                  data: data.datasets[0].data,
-                  backgroundColor:
-                    data.datasets[0].backgroundColor || this.barColor,
+                  label: "Bar Dataset",
+                  data: [10, 20, 30],
+                  backgroundColor: this.barColor,
+                  borderColor: "#42a5f5",
+                  fill: false,
                 },
               ],
             };
+          } else {
+            console.log("00000000000000000000", data);
+            return { ...data };
           }
         case "stackedBar":
           if (from === "computed") {
@@ -690,59 +690,31 @@ export default {
       }, 300); // Delay the update to prevent rapid triggering
     },
     updateDataHandler(value) {
-      this.chartUpdatedDataClone = {
-        labels: [],
-        datasets: [],
-      };
-      clearTimeout(this.debounceTimeout); // Clear the previous timeout
+      this.chartUpdatedDataClone = { labels: [], datasets: [] };
+      clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(() => {
-        if (!this.updatingChartData) {
-          this.updatingChartData = true;
-          // Update the chart data when new data is emitted from the child
-          console.log("chartjs-updateDataHandler", value);
-          // Update the dynamic chart data
-          this.chartUpdatedDataClone = this.getChartData(
-            this.selectedChartType,
-            "updated",
-            value
-          );
-          // this.dynamicChartData = this.getChartData(
-          //   this.selectedChartType,
-          //   "updated",
-          //   value
-          // );
-          console.log("chartUpdatedDataClone", this.chartUpdatedDataClone);
-          // Re-render the chart
-          this.updatingChartData = false;
-        }
-      }, 300); // 300ms delay
+        this.chartKey += 1;
+        this.chartUpdatedDataClone = this.getChartData(
+          this.selectedChartType,
+          "updated",
+          value
+        );
+      }, 300);
     },
     updateOptionHandler(value) {
-      clearTimeout(this.debounceTimeout); // Clear the previous timeout
+      clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(() => {
-        if (!this.updatingChartData) {
-          this.updatingChartData = true;
-          // Update the chart data when new data is emitted from the child
-          console.log("chartjs-updateOptionHandler", value);
-          // Update the dynamic chart data
-          this.chartOptionsClone = { ...value };
-          // console.log("updateOptionHandler", this.chartUpdatedDataClone);
-          // Re-render the chart
-          this.updatingChartData = false;
+        this.chartKey += 1;
+        if (JSON.stringify(this.chartOptions) !== JSON.stringify(value)) {
+          console.log("second---if");
+          const chartOption = JSON.parse(JSON.stringify(value));
+          this.chartOptions = JSON.parse(JSON.stringify(chartOption));
+          this.chartOptionsClone = this.chartOptions;
         }
-      }, 300); // 300ms delay
+      }, 300);
     },
   },
   watch: {
-    // dynamicChartData: {
-    //   handler(newValue, oldValue) {
-    //     if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-    //       this.updateChart();
-    //       this.chartUpdatedDataClone = newValue;
-    //     }
-    //   },
-    //   deep: true,
-    // },
     chartOptions: {
       handler(newValue, oldValue) {
         if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
@@ -751,12 +723,6 @@ export default {
       },
       deep: true,
     },
-    // selectedChartType: {
-    //   handler() {
-    //     this.updateChart();
-    //   },
-    //   deep: true,
-    // },
   },
 };
 </script>

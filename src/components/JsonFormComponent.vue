@@ -299,11 +299,11 @@ export default {
       this.open = !this.open;
     },
     updateData(value) {
-      console.log("-----dfasdf--updateData", value);
+      // console.log("-----dfasdf--updateData", value);
       this.$emit("update-data", value);
     },
     updateChildData(key, value) {
-      console.log("-----dfasdf--child", key, "::", value);
+      // console.log("-----dfasdf--child", key, "::", value);
       if (this.formData[key] !== value) {
         this.formData[key] = value;
         this.$emit("update-data", this.formData);
