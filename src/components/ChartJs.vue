@@ -151,8 +151,11 @@ export default {
       chartToggler: true,
       chartOptions: {
         indexAxis: "x",
+        barThickness: 22,
         responsive: true,
         animation: true,
+        maintainAspectRatio: false,
+        aspectRatio: 1 | 2,
         animations: {
           tension: {
             duration: 3000,
@@ -162,8 +165,6 @@ export default {
             loop: false,
           },
         },
-        maintainAspectRatio: false,
-        aspectRatio: 1 | 2,
         plugins: {
           customCanvasBackgroundColor: {
             color: "#90ee90",
@@ -272,12 +273,14 @@ export default {
             },
           },
         },
-        barThickness: 22,
       },
       chartOptionsClone: {
         indexAxis: "x",
+        barThickness: 22,
         responsive: true,
         animation: true,
+        maintainAspectRatio: false,
+        aspectRatio: 1 | 2,
         animations: {
           tension: {
             duration: 3000,
@@ -287,8 +290,6 @@ export default {
             loop: false,
           },
         },
-        maintainAspectRatio: false,
-        aspectRatio: 1 | 2,
         plugins: {
           customCanvasBackgroundColor: {
             color: "#90ee90",
@@ -397,7 +398,6 @@ export default {
             },
           },
         },
-        barThickness: 22,
       },
       chartKey: 0, // key for forcing re-render
       // Define Chart Data in the data object to make it dynamic
@@ -702,11 +702,12 @@ export default {
       }, 300);
     },
     updateOptionHandler(value) {
+      console.log("second---if--1");
       clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(() => {
         this.chartKey += 1;
         if (JSON.stringify(this.chartOptions) !== JSON.stringify(value)) {
-          console.log("second---if");
+          console.log("second---if--2");
           const chartOption = JSON.parse(JSON.stringify(value));
           this.chartOptions = JSON.parse(JSON.stringify(chartOption));
           this.chartOptionsClone = this.chartOptions;
@@ -715,14 +716,14 @@ export default {
     },
   },
   watch: {
-    chartOptions: {
-      handler(newValue, oldValue) {
-        if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-          this.updateOptionChart();
-        }
-      },
-      deep: true,
-    },
+    // chartOptions: {
+    //   handler() {
+    //     // if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+    //     //   this.updateOptionChart();
+    //     // }
+    //   },
+    //   deep: true,
+    // },
   },
 };
 </script>
