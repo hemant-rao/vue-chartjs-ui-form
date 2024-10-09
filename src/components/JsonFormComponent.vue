@@ -323,12 +323,12 @@ export default {
     },
   },
   watch: {
-    // formData: {
-    //   handler(newValue) {
-    //     this.$emit("update-data", newValue);
-    //   },
-    //   deep: true,
-    // },
+    formData: {
+      handler(newValue) {
+        this.$emit("update-data", newValue);
+      },
+      deep: true,
+    },
   },
 };
 </script>
