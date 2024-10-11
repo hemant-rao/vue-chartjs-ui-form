@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     updateData(value) {
-      // console.log("Dfadfasdfsdafsdaf", value);
       this.$emit("update-data", value); // Emit any changes made in the form
     },
   },
