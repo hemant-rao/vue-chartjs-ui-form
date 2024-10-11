@@ -35,7 +35,6 @@
 </template>
 
 <script>
-// import JsonFormComponentData from "./JsonFormComponentData.vue";
 import JsonFormComponent from "./JsonFormComponent.vue";
 export default {
   props: {
@@ -52,7 +51,6 @@ export default {
   },
   name: "JsonFormParent",
   components: {
-    // JsonFormComponentData,
     JsonFormComponent,
   },
   data() {
@@ -72,7 +70,6 @@ export default {
   },
   methods: {
     updateData(value) {
-      // console.log("JsonFormParent", value);
       this.$emit("update-data", value); // Emit any changes made in the form
     },
   },

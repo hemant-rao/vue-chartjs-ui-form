@@ -269,11 +269,9 @@ export default {
       this.open = !this.open;
     },
     updateData(value) {
-      //   console.log("updateData-value", value);
       this.$emit("update-data", value);
     },
     updateChildData(key, value) {
-      // console.log("updateChildData-value", key, ":", value);
       this.formData[key] = value;
       this.$emit("update-data", this.formData);
     },
@@ -281,7 +279,6 @@ export default {
       clearTimeout(this.debounceTimeout); // Clear the previous timeout
       this.debounceTimeout = setTimeout(() => {
         this.updateData(value); // Update the data after the delay
-        // console.log("0000000000ddddddddd", value);
       }, 300); // 300ms delay
     },
   },

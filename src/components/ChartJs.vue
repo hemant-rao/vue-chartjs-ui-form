@@ -210,9 +210,6 @@ export default {
             offset: -7,
             align: "end",
             color: "#3c0d48",
-            // formatter: function (value, context) {
-            //   return value > 0 ? value : "";
-            // },
           },
         },
         scales: {
@@ -340,9 +337,6 @@ export default {
             offset: -7,
             align: "end",
             color: "#3c0d48",
-            // formatter: function (value, context) {
-            //   return value > 0 ? value : "";
-            // },
           },
         },
         scales: {
@@ -464,7 +458,6 @@ export default {
       switch (chartType) {
         case "bar":
           if (from === "computed") {
-            // console.log("dsfaaaaadsfdsfsad");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -478,12 +471,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "stackedBar":
           if (from === "computed") {
-            console.log("dsfaaaaadsfdsfsad");
             return {
               labels: [
                 "January",
@@ -513,12 +504,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "line":
           if (from === "computed") {
-            console.log("00000000000000000000-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -531,12 +520,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000-ELSE", JSON.stringify(data));
             return { ...data };
           }
         case "doughnut":
           if (from === "computed") {
-            console.log("doughnut-computed");
             return {
               labels: ["Red", "Yellow", "Green", "Blue"],
               datasets: [
@@ -548,12 +535,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "pie":
           if (from === "computed") {
-            console.log("pie-computed");
             return {
               labels: ["Red", "Blue", "Yellow"],
               datasets: [
@@ -565,12 +550,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "polarArea":
           if (from === "computed") {
-            console.log("polarArea-computed");
             return {
               labels: ["Red", "Blue", "Yellow"],
               datasets: [
@@ -582,12 +565,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "radar":
           if (from === "computed") {
-            console.log("radar-computed");
             return {
               labels: ["A", "B", "C", "D", "E"],
               datasets: [
@@ -608,12 +589,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "bubble":
           if (from === "computed") {
-            console.log("bubble-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -629,12 +608,10 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         case "scatter":
           if (from === "computed") {
-            console.log("scatter-computed");
             return {
               labels: ["A", "B", "C"],
               datasets: [
@@ -650,7 +627,6 @@ export default {
               ],
             };
           } else {
-            console.log("00000000000000000000", data);
             return { ...data };
           }
         default:
@@ -712,12 +688,10 @@ export default {
       }, 300);
     },
     updateOptionHandler(value) {
-      console.log("second---if--1");
       clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(() => {
         this.chartKey += 1;
         if (JSON.stringify(this.chartOptions) !== JSON.stringify(value)) {
-          console.log("second---if--2");
           const chartOption = JSON.parse(JSON.stringify(value));
           this.chartOptions = JSON.parse(JSON.stringify(chartOption));
           this.chartOptionsClone = this.chartOptions;
