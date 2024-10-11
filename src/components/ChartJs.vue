@@ -725,16 +725,7 @@ export default {
       }, 300);
     },
   },
-  watch: {
-    // chartOptions: {
-    //   handler() {
-    //     // if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-    //     //   this.updateOptionChart();
-    //     // }
-    //   },
-    //   deep: true,
-    // },
-  },
+  watch: {},
 };
 </script>
 
