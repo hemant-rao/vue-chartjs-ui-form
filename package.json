@@ -1,7 +1,7 @@
 {
   "name": "vue-chartjs-ui-form",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -42,5 +42,26 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "description": "A Vue.js component for creating and customizing Chart.js charts with a user-friendly form.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hemant-rao/vue-chartjs-ui-form.git"
+  },
+  "keywords": [
+    "vue",
+    "chart.js",
+    "chart",
+    "form",
+    "ui",
+    "data",
+    "visualization"
+  ],
+  "author": "Hemant Rao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hemant-rao/vue-chartjs-ui-form/issues"
+  },
+  "homepage": "https://github.com/hemant-rao/vue-chartjs-ui-form#readme"
 }
