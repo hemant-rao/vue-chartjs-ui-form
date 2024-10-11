@@ -9,6 +9,8 @@ A dynamic Vue.js component that allows users to generate Chart.js configurations
 - **JSON Output:** Real-time JSON representation of the chart configuration.
 - **Modular Components:** Designed with reusable Vue.js components for easy integration.
 
+Live Demo:-> https://dailyfoodserve.com/chartjs/
+
 ## Installation
 
 1. Clone the repository:
